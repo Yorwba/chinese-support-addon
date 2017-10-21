@@ -252,7 +252,8 @@ def myRebuildAddonsMenu(self):
 
 
 
-aqt.addons.AddonManager.rebuildAddonsMenu = wrap(aqt.addons.AddonManager.rebuildAddonsMenu, myRebuildAddonsMenu)
+# this was removed from Anki, the functionality should probably be provided via the configuration editor instead
+# aqt.addons.AddonManager.rebuildAddonsMenu = wrap(aqt.addons.AddonManager.rebuildAddonsMenu, myRebuildAddonsMenu)
 
 display_next_tip()
 display_new_version_message()
