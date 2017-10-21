@@ -8,8 +8,8 @@
 
 from aqt.utils import showInfo, askUser
 from anki.find import Finder
-from edit_behavior import *
-from edit_functions import *
+from .edit_behavior import *
+from .edit_functions import *
 from aqt import mw
 from aqt.utils import showInfo
 import re
@@ -20,7 +20,7 @@ def no_html(txt):
 
 def fill_sounds(collection, view_key):
     if view_key == "deckBrowser":
-        return showInfo(u"Please first select one of your decks.")
+        return showInfo("Please first select one of your decks.")
     if not(askUser("<div>This will update the <i>Sound</i> fields in the current deck, if they exist and are empty, using the selected speech engine.</div>\n\n<div>Please back-up your Anki deck first!</div>\n\n<div><b>Continue?</b></div>")):
         return False
 
@@ -58,7 +58,7 @@ def fill_sounds(collection, view_key):
 
                 # write back to note from dict and flush
                 for f in Sound_fields + Sound_Mandarin_fields + Sound_Cantonese_fields:
-                    if note_dict.has_key(f) and note_dict[f] <> note[f]:
+                    if f in note_dict and note_dict[f] != note[f]:
                         note[f] = note_dict[f]
                 note.flush()
     mw.progress.finish()
@@ -77,7 +77,7 @@ def fill_sounds(collection, view_key):
 
 def fill_pinyin(collection, view_key):
     if view_key == "deckBrowser":
-        return showInfo(u"Please first select one of your decks.")
+        return showInfo("Please first select one of your decks.")
     if not(askUser("<div>This will update the <i>Pinyin</i> (or <i>Transcription</i>), <i>Color</i> and <i>Ruby</i> fields in the current deck, if they exist.</div>\n\n<div><i>Pinyin</i> and <i>Transcription</i> will be filled if empty. Otherwise, their colorization and accentuation will be refreshed as needed.</div>\n\n<div>Please back-up your Anki deck first!</div>\n\n<div><b>Continue?</b></div>")):
         return False
 
@@ -133,7 +133,7 @@ def fill_pinyin(collection, view_key):
             def write_back(fields):
                 num_updated = 0
                 for f in fields:
-                    if note_dict.has_key(f) and note_dict[f] <> note[f]:
+                    if f in note_dict and note_dict[f] != note[f]:
                         note[f] = note_dict[f]
                         num_updated+=1
                 return num_updated
@@ -165,7 +165,7 @@ def fill_pinyin(collection, view_key):
 
 def fill_translation(collection, view_key):
     if view_key == "deckBrowser":
-        return showInfo(u"First select one of your decks")
+        return showInfo("First select one of your decks")
 
     if not(askUser("<div>This will update the <i>Meaning</i>, <i>Mean Word</i>, and <i>Also Written</i> fields in the current deck, if they exist and are empty.</div><b>Learning tip:</b><div>Automatic dictionary lookup tends to produce very long text, often with multiple translations.</div>\n\n<div>For more effective memorization, it's highly recommended to trim them down to just a few words, only one meaning, and possibly add some mnemonics.</div>\n\n<div>Dictionary lookup is simply meant as a way to save you time when typing; please consider editing each definition by hand when you're done.</div>\n\n<div>Please back-up your Anki deck first!</div>\n\n<div><b>Continue?</b></div>")):
         return False
@@ -220,7 +220,7 @@ def fill_translation(collection, view_key):
 
             def write_back(fields):
                 for f in fields:
-                    if note_dict.has_key(f) and note_dict[f] <> note[f]:
+                    if f in note_dict and note_dict[f] != note[f]:
                         note[f] = note_dict[f]
                 return
 
@@ -246,7 +246,7 @@ def fill_translation(collection, view_key):
 
 def fill_simp_trad(collection, view_key):
     if view_key == "deckBrowser":
-        return showInfo(u"First select one of your decks")
+        return showInfo("First select one of your decks")
     if not(askUser("<div>This will update the <i>Simplified</i> and <i>Traditional</i> fields in the current deck, if they exist and are empty.</div>\n\n<div>Please back-up your Anki deck first!</div>\n\n<div><b>Continue?</b></div>")):
         return False
 
@@ -277,11 +277,11 @@ def fill_simp_trad(collection, view_key):
 
             # write back to note from dict and flush
             for f in Traditional_fields:
-                if note_dict.has_key(f) and note_dict[f] <> note[f]:
+                if f in note_dict and note_dict[f] != note[f]:
                     note[f] = note_dict[f]
                     d_success+=1
             for f in Simplified_fields:
-                if note_dict.has_key(f) and note_dict[f] <> note[f]:
+                if f in note_dict and note_dict[f] != note[f]:
                     note[f] = note_dict[f]
                     d_success+=1
             note.flush()
@@ -295,7 +295,7 @@ def fill_simp_trad(collection, view_key):
 
 def fill_silhouette(collection, view_key):
     if view_key == "deckBrowser":
-        return showInfo(u"First select one of your decks")
+        return showInfo("First select one of your decks")
     if not(askUser("<div>This will update the <i>Silhouette</i> fields in the current deck.</div>\n\n<div>Please back-up your Anki deck first!</div>\n\n<div><b>Continue?</b></div>")):
         return False
 
@@ -323,7 +323,7 @@ def fill_silhouette(collection, view_key):
 
             # write back to note from dict and flush
             for f in Silhouette_fields:
-                if note_dict.has_key(f) and note_dict[f] <> note[f]:
+                if f in note_dict and note_dict[f] != note[f]:
                     note[f] = note_dict[f]
                     d_success+=1
             note.flush()

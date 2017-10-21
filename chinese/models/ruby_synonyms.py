@@ -10,7 +10,7 @@
 import string
 
 import anki.stdmodels
-from css import style
+from .css import style
 
 # List of fields
 ######################################################################
@@ -21,7 +21,7 @@ fields_list = ["Hanzi", "Meaning", "Hanzi2", "Hanzi3", "Hanzi4",
 # Card templates
 ######################################################################
 
-recognition_front = string.Template(u'''\
+recognition_front = string.Template('''\
 {{#Hanzi$num}}
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
@@ -32,7 +32,7 @@ recognition_front = string.Template(u'''\
 {{/Hanzi$num}}
 ''')
 
-recall_front = string.Template(u'''
+recall_front = string.Template('''
 {{#Hanzi$num}}
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
@@ -51,7 +51,7 @@ recall_front = string.Template(u'''
 {{/Hanzi$num}}
 ''')
 
-card_back = string.Template(u'''
+card_back = string.Template('''
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 <div class=question>
 <div class=meaning>{{Meaning}}</div>
@@ -84,11 +84,11 @@ def add_model_ruby_synonyms(col):
         fm = mm.newField(f)
         mm.addField(m, fm)
     for n in ["", "2", "3", "4"]:
-        t = mm.newTemplate(u"Recognition"+n)
+        t = mm.newTemplate("Recognition"+n)
         t['qfmt'] = recognition_front.substitute(num=n)
         t['afmt'] = card_back.substitute(num=n)
         mm.addTemplate(m, t)
-        t = mm.newTemplate(u"Recall"+n)
+        t = mm.newTemplate("Recall"+n)
         t['qfmt'] = recall_front.substitute(num=n)
         t['afmt'] = card_back.substitute(num=n)
         mm.addTemplate(m, t)

@@ -50,7 +50,7 @@ def addchars(chars, txt, date):
     try:
         for c in txt:
             try:
-                if re.match( u"[\u3400-\u9fff]", c):
+                if re.match( "[\u3400-\u9fff]", c):
                     chars[c] = max(date, chars[c])
             except:
                 chars[c]=date
@@ -60,7 +60,7 @@ def addchars(chars, txt, date):
 def addword(words, txt, date):
     "List each card containing at least one chinese character" 
     try:
-        if re.match(u".*[\u3400-\u9fff]", txt):
+        if re.match(".*[\u3400-\u9fff]", txt):
             words[txt] = date
     except:
         pass
@@ -78,7 +78,7 @@ def history(data, chunks=None, chunk_size=1):
     subtotal=0
     date=-chunks
     #Fill histogram, as a list. d = nb of days in the past (0=today).
-    for d in data.values():
+    for d in list(data.values()):
         if d <= chunks*chunk_size:
             histogram[d/chunk_size] += 1
         else:

@@ -13,8 +13,8 @@ from aqt import mw
 from aqt.utils import askUser, isWin, showInfo
 from aqt.downloader import download
 
-from config import chinese_support_config
-from __init__ import __version__
+from .config import chinese_support_config
+from .__init__ import __version__
 
 older_versions = ['\xb8\xd2\x9e\x073\x8f\xad\xf6\xe2cip\xdd\xe9;\xa2',
 '_\x7f\xfa\xd6=\x95\x89\xd7\x18\xd9A\x9a\xeb_\xf9\xa3']
@@ -24,10 +24,11 @@ upgrade_question = _("You have just upgraded <b>Chinese Support add-on</b> from 
 addon_dir = mw.pm.addonFolder()
 if isWin:
     addon_dir = addon_dir.encode(sys.getfilesystemencoding())
-sys.path.insert(0, os.path.join(addon_dir, "chinese") )
+package_path = os.path.join(addon_dir, *__name__.split(".")[:-1])
+sys.path.insert(0, package_path )
 
-edit_behavior_file = os.path.join(addon_dir, "chinese", "edit_behavior.py")
-edit_behavior_model = os.path.join(addon_dir, "chinese", "edit_behavior_model.py")
+edit_behavior_file = os.path.join(package_path, "edit_behavior.py")
+edit_behavior_model = os.path.join(package_path, "edit_behavior_model.py")
 
 def compare_versions():
     return open(edit_behavior_model).read() == open(edit_behavior_file).read()
@@ -58,10 +59,10 @@ elif not "edit_behavior_model.py hash" in chinese_support_config.options:
         #User-modified
         ask_to_upgrade()
     update_config()
-elif __version__ <> chinese_support_config.options["add-on version"]:
+elif __version__ != chinese_support_config.options["add-on version"]:
     #New version. Compare current edit_behavior with former model
     current_hash = md5.new(open(edit_behavior_file).read()).hexdigest()
-    if current_hash <> chinese_support_config.options["edit_behavior_model.py hash"]:
+    if current_hash != chinese_support_config.options["edit_behavior_model.py hash"]:
         ask_to_upgrade()
     update_config()
 else:

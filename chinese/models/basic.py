@@ -8,7 +8,7 @@
 #
 
 import anki.stdmodels
-from css import style
+from .css import style
 
 # List of fields
 ######################################################################
@@ -18,19 +18,19 @@ fields_list = ["Hanzi",  "Meaning", "Reading", "Color", "Sound"]
 # Card templates
 ######################################################################
 
-recognition_front = u'''\
+recognition_front = '''\
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
 <span class=chinese>{{Hanzi}}</span>
 '''
 
-recall_front = u'''\
+recall_front = '''\
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
 <div>{{Meaning}}</div>
 '''
 
-card_back = u'''\
+card_back = '''\
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
 <div>{{Meaning}}</div>
@@ -54,7 +54,7 @@ def add_model_simp(col):
 #    t['qfmt'] = recognition_front
 #    t['afmt'] = card_back
 #    mm.addTemplate(m, t)
-    t = mm.newTemplate(u"Recall")
+    t = mm.newTemplate("Recall")
     t['qfmt'] = recall_front
     t['afmt'] = card_back
     mm.addTemplate(m, t)

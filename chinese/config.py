@@ -7,7 +7,7 @@
 
 import os.path
 import json
-import __init__
+from . import __init__
 from aqt import mw
 
 initial_options =  { 

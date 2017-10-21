@@ -13,19 +13,20 @@ import re
 from anki.hooks import addHook
 from anki.utils import stripHTML
 from anki.template.hint import hint
-from ruby import ruby_top, ruby_top_text, ruby_bottom, ruby_bottom_text
-from ruby import no_sound
+from .ruby import ruby_top, ruby_top_text, ruby_bottom, ruby_bottom_text
+from .ruby import no_sound
+from functools import reduce
 
 r = r' ?([^ >]+?)\[(.+?)\]'
 ruby_re = r'<ruby><rb>\1</rb><rt>\2</rt></ruby>'
 
 tone_info= [
-[u'[ɑ̄āĀáɑ́ǎɑ̌ÁǍàɑ̀À]', 'a'],
-[u'[ēĒéÉěĚèÈ]', 'e'],
-[u'[īĪíÍǐǏìÌ]', 'i'],
-[u'[ōŌóÓǒǑòÒ]', 'o'],
-[u'[ūŪúÚǔǓùÙ]', 'u'],
-[u'[ǖǕǘǗǚǙǜǛ]', 'v']
+['[ɑ̄āĀáɑ́ǎɑ̌ÁǍàɑ̀À]', 'a'],
+['[ēĒéÉěĚèÈ]', 'e'],
+['[īĪíÍǐǏìÌ]', 'i'],
+['[ōŌóÓǒǑòÒ]', 'o'],
+['[ūŪúÚǔǓùÙ]', 'u'],
+['[ǖǕǘǗǚǙǜǛ]', 'v']
 ]
 
 
@@ -46,7 +47,7 @@ def hanzi_silhouette(txt, *args):
     Eg: '又[you4]A又B' returns '_ A _ B'.
     '''
     if len(txt)<10:
-        return re.sub(u'[\u4e00-\u9fff]', '_ ', ruby_bottom_text(txt))
+        return re.sub('[\u4e00-\u9fff]', '_ ', ruby_bottom_text(txt))
     else:
         return ""
 
@@ -57,7 +58,7 @@ def hanzi_context(txt, extra, context, tag, fullname):
     to allow the user to identify the correct hanzi from a note.
     '''
     other_hanzi = []
-    for k, v in context.iteritems():
+    for k, v in context.items():
         if re.match(r'Hanzi.*', k, flags=re.IGNORECASE) and v != txt :
             other_hanzi += [k]
     if len(other_hanzi)<1:
@@ -74,7 +75,7 @@ def hanzi_context(txt, extra, context, tag, fullname):
         return a + " / " + b
     context_string = reduce(concat, other_hanzi_values)
     for h in txt:
-        if  h >= u'\u4e00' and h <= u'\u9fff':
+        if  h >= '\u4e00' and h <= '\u9fff':
             context_string = re.sub(h, " _ ", context_string)
     context_string = re.sub("  ", " ", context_string)
     return context_string

@@ -20,8 +20,8 @@ except ImportError:
     class JSONDecodeError(Exception): pass
     # Ugly: No alternative because this exception class doesnt seem to be there
     # in the standard python module
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import warnings
 import logging
 
@@ -96,13 +96,13 @@ class Translator(object):
 
         :return: The access token to be used with subsequent requests
         """
-        args = urllib.urlencode({
+        args = urllib.parse.urlencode({
             'client_id': self.client_id,
             'client_secret': self.client_secret,
             'scope': self.scope,
             'grant_type': self.grant_type
         })
-        response = json.loads(urllib.urlopen(
+        response = json.loads(urllib.request.urlopen(
             'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13', args
         ).read())
 
@@ -121,18 +121,18 @@ class Translator(object):
         if not self.access_token:
             self.access_token = self.get_access_token()
 
-        request = urllib2.Request(
-            "%s?%s" % (url, urllib.urlencode(params)),
+        request = urllib.request.Request(
+            "%s?%s" % (url, urllib.parse.urlencode(params)),
             headers={'Authorization': 'Bearer %s' % self.access_token}
         )
-        response = urllib2.urlopen(request).read()
+        response = urllib.request.urlopen(request).read()
         rv =  json.loads(response.decode("UTF-8-sig"))
 
-        if isinstance(rv, basestring) and \
+        if isinstance(rv, str) and \
                 rv.startswith("ArgumentOutOfRangeException"):
             raise ArgumentOutOfRangeException(rv)
 
-        if isinstance(rv, basestring) and \
+        if isinstance(rv, str) and \
                 rv.startswith("TranslateApiException"):
             raise TranslateApiException(rv)
 

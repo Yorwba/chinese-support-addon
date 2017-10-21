@@ -10,48 +10,48 @@
 # https://github.com/ttempe/chinese-support-addon/wiki/Edit-behavior
 # Also, see the Python tutorial at http://docs.python.org/2/tutorial
 
-from config import chinese_support_config
-from edit_functions import *
+from .config import chinese_support_config
+from .edit_functions import *
 
 #Define Variables
 
 anki1_model_names    = ["Chinese", "chinese", "Mandarin Vocab"] #"Mandarin" is used by the Pinyin Toolkit port by Chris Hatch
 
-Hanzi_fields         = ["Expression", "Hanzi", "Chinese",  u"汉字", u"漢字", u"中文"]
+Hanzi_fields         = ["Expression", "Hanzi", "Chinese",  "汉字", "漢字", "中文"]
 
 #Will use the settings under Tools->Chinese Support->Use local dictionary
-Meaning_fields       = ["Meaning", "Definition", u"意思", u"翻译", u"翻譯", u"解释", u"解釋"]
+Meaning_fields       = ["Meaning", "Definition", "意思", "翻译", "翻譯", "解释", "解釋"]
 
 #Will ignore settings and fill regardless
-English_fields       = ["English", u"英语", u"英語", u"英文"]
-German_fields        = ["German", "Deutsch", u"德语", u"德語", u"德文"]
-French_fields        = ["French", "le français", u"法语", u"法語", u"法文"]
+English_fields       = ["English", "英语", "英語", "英文"]
+German_fields        = ["German", "Deutsch", "德语", "德語", "德文"]
+French_fields        = ["French", "le français", "法语", "法語", "法文"]
 
 #Will use the settings under Tools->Chinese Support->Set Transcription
 Transcription_fields = ["Reading"]
 
 #Will ignore settings and fill regardless
-Pinyin_fields = ["Pinyin", "PY", u"拼音", u"大陆拼音", u"大陸拼音"]
-PinyinTW_fields = ["PinyinTW", "PYTW", u"臺灣拼音", u"台灣拼音", u"台湾拼音"]
-Cantonese_fields = ["Cantonese", u"廣東話", u"广东话", u"粵語", u"粤语",u"廣州話", u"广州话", u"粵", u"粤", u"粵拼", u"粤拼"]
-Bopomofo_fields = [u"注音符號" u"註音符號", u"注音符号", "Bopomofo", u"ㄅㄆㄇㄈ"]
+Pinyin_fields = ["Pinyin", "PY", "拼音", "大陆拼音", "大陸拼音"]
+PinyinTW_fields = ["PinyinTW", "PYTW", "臺灣拼音", "台灣拼音", "台湾拼音"]
+Cantonese_fields = ["Cantonese", "廣東話", "广东话", "粵語", "粤语","廣州話", "广州话", "粵", "粤", "粵拼", "粤拼"]
+Bopomofo_fields = ["注音符號" "註音符號", "注音符号", "Bopomofo", "ㄅㄆㄇㄈ"]
 
-Sound_fields         = ["Audio", "Sound", "Spoken", u"声音", u"聲音"]
+Sound_fields         = ["Audio", "Sound", "Spoken", "声音", "聲音"]
 
 #Will use Google TTS Mandarin regardless of settings
 Sound_Mandarin_fields         = ["Sound - Mandarin"]
 #Will use Google TTS Cantonese regardless of settings
 Sound_Cantonese_fields         = ["Sound - Cantonese"]
 
-Simplified_fields    = ["Simplified", "Simp", "Simp.", u"简体", u"簡體", u"简化", u"簡化", u"简体字", u"簡體字", u"简化字", u"簡化字"]
-Traditional_fields   = ["Traditional", "Trad", "Trad.", u"繁体", u"繁體", u"繁体字", u"繁體字"]
+Simplified_fields    = ["Simplified", "Simp", "Simp.", "简体", "簡體", "简化", "簡化", "简体字", "簡體字", "简化字", "簡化字"]
+Traditional_fields   = ["Traditional", "Trad", "Trad.", "繁体", "繁體", "繁体字", "繁體字"]
 
-Mean_Word_fields     = ["Mean Word", "Measure Word", "MW", "Mean", "Classifier", u"量词", u"量詞"]
+Mean_Word_fields     = ["Mean Word", "Measure Word", "MW", "Mean", "Classifier", "量词", "量詞"]
 
 Alternate_fields     = ["Also writted", "Alt", "Alternate"]
 
 #Will fill with any Transcription/Pinyin/PinyinTW/Cantonese/Bopomofo field (Transcription fields take highest priority)
-Color_fields         = ["Color", "Colour", "Colored Hanzi", "Coloured Hanzi", u"彩色"]
+Color_fields         = ["Color", "Colour", "Colored Hanzi", "Coloured Hanzi", "彩色"]
 
 #Will only fill using a Transcription/Pinyin/PinyinTW/Cantonese/Bopomofo field respectively
 ColorPY_fields         = ["ColorPY", "ColourPY"]
@@ -393,7 +393,7 @@ def update_Simplified_fields(hanzi, dico):
         return
     
     s = simplify(hanzi)
-    if s <> hanzi:
+    if s != hanzi:
         set_all(Simplified_fields, dico, to = s )
     else:
         set_all(Simplified_fields, dico, to = "" )
@@ -406,7 +406,7 @@ def update_Traditional_fields(hanzi, dico):
         return
     
     t = traditional(hanzi)
-    if t <> hanzi:
+    if t != hanzi:
         set_all(Traditional_fields, dico, to = t )
     else:
         set_all(Traditional_fields, dico, to = "" )

@@ -8,7 +8,7 @@
 #
 
 import anki.stdmodels
-from css import style
+from .css import style
 
 # List of fields
 ######################################################################
@@ -18,13 +18,13 @@ fields_list = ["Hanzi",  "Meaning", "Reading", "Color", "Mean Word", "Sound", "S
 # Card templates
 ######################################################################
 
-recognition_front = u'''\
+recognition_front = '''\
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
 <span class=chinese>{{Hanzi}}</span>
 '''
 
-recall_front = u'''\
+recall_front = '''\
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
 <div>{{Meaning}}</div>
@@ -32,7 +32,7 @@ recall_front = u'''\
 <div class=hint>{{hint_transcription:Reading}}</div>
 '''
 
-card_back = u'''\
+card_back = '''\
 <div class=tags>{{Deck}} {{#Tags}} -- {{/Tags}}{{Tags}}</div>
 
 <div class=answer>
@@ -63,11 +63,11 @@ def add_model(col):
     for f in fields_list:
         fm = mm.newField(f)
         mm.addField(m, fm)
-    t = mm.newTemplate(u"Recognition")
+    t = mm.newTemplate("Recognition")
     t['qfmt'] = recognition_front
     t['afmt'] = card_back
     mm.addTemplate(m, t)
-    t = mm.newTemplate(u"Recall")
+    t = mm.newTemplate("Recall")
     t['qfmt'] = recall_front
     t['afmt'] = card_back
     mm.addTemplate(m, t)

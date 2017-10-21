@@ -44,7 +44,8 @@ class DictDB:
     def __init__(self):
         try:
             from aqt import mw
-            db_file = os.path.join(mw.pm.addonFolder(), "chinese", "db", "chinese_dict.sqlite")
+            package_path = os.path.join(mw.pm.addonFolder(), *__name__.split(".")[:-1])
+            db_file = os.path.join(package_path, "db", "chinese_dict.sqlite")
         except: #Used for local debugging
             db_file = "db/chinese_dict.sqlite"
 
@@ -110,7 +111,7 @@ class DictDB:
         #We're looking up a string that's not in the dictionary
         #We'll try each 4-character sequence in turn, then 3-sequence, then 2-sequence and if those fails, do unit lookup.
         #transcription = u""
-        transcription = u""
+        transcription = ""
         w = w[:]
         last_was_pinyin = False
         while len(w)>0:
@@ -144,7 +145,7 @@ class DictDB:
 
     def get_cantonese(self, w, only_one=True):
         """Returns a character-by-character cantonese transcription."""
-        t = u""
+        t = ""
         for c in w:
             self.c.execute("select kCantonese from hanzi where cp = ?;", (c,) )
             try:
@@ -189,7 +190,7 @@ class DictDB:
 
         #We're looking up a string that's not in the dictionary
         #We'll try each 4-character sequence in turn, then 3-sequence, then 2-sequence and if those fails, do unit lookup.
-        traditional = u""
+        traditional = ""
         w = w[:]
         while len(w)>0:
             word_was_found = False
@@ -246,7 +247,7 @@ class DictDB:
 
         #We're looking up a string that's not in the dictionary
         #We'll try each 4-character sequence in turn, then 3-sequence, then 2-sequence and if those fails, do unit lookup.
-        simplified = u""
+        simplified = ""
         w = w[:]
         while len(w)>0:
             word_was_found = False
@@ -291,7 +292,7 @@ class DictDB:
         self.c.execute("select distinct classifiers from cidian where (traditional=? or simplified=?);", (txt, txt))
         try:
             #fetchall returns a list of tuples, converts to a list of strings
-            return filter(lambda a:a, map(lambda a:a[0], self.c.fetchall()))
+            return [a for a in [a[0] for a in self.c.fetchall()] if a]
         except:
             return []
 
@@ -299,7 +300,7 @@ class DictDB:
         self.c.execute("select distinct alternates from cidian where (traditional=? or simplified=?);", (txt, txt))
         try:
             #fetchall returns a list of tuples, converts to a list of strings
-            return filter(lambda a:a, map(lambda a:a[0], self.c.fetchall()))
+            return [a for a in [a[0] for a in self.c.fetchall()] if a]
         except:
             return []
         

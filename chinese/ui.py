@@ -20,15 +20,15 @@ from aqt.qt import *
 from aqt.utils import showInfo, openLink, askUser
 from anki.hooks import wrap
 import aqt.main
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 
 from .config import chinese_support_config
 from . import __init__
-import edit_behavior
-from upgrade import edit_behavior_file, do_upgrade
-import edit_ui
-from fill_missing import fill_sounds, fill_pinyin, fill_translation, fill_simp_trad, fill_silhouette
+from . import edit_behavior
+from .upgrade import edit_behavior_file, do_upgrade
+from . import edit_ui
+from .fill_missing import fill_sounds, fill_pinyin, fill_translation, fill_simp_trad, fill_silhouette
 
 offer_auto_module_upgrade = False #Broken for now.
 
@@ -117,13 +117,13 @@ def check_for_next_version(*args, **kwargs):
             return False
     try:
         #fetch the latest release on Github. This means github must be updated *after* Ankiweb
-        latest_data = urllib2.urlopen('https://raw.github.com/ttempe/chinese-support-addon/master/chinese/__init__.py', timeout=7).read()
+        latest_data = urllib.request.urlopen('https://raw.github.com/ttempe/chinese-support-addon/master/chinese/__init__.py', timeout=7).read()
         latest_version = re.search(r"__version__\s*=\s*\"\"\"(.*?)\"\"\"", latest_data).group(1)
         latest_comment = re.search(r"release_info\s*=\s*\"\"\"(.*?)\"\"\"", latest_data, re.S).group(1)
-        import __init__
+        from . import __init__
         local_version = __init__.__version__
         if is_newer(latest_version, local_version):
-            if chinese_support_config.options["latest_available_version"] <> latest_version:
+            if chinese_support_config.options["latest_available_version"] != latest_version:
                 chinese_support_config.set_option("latest_available_version", latest_version)
                 if offer_auto_module_upgrade:
                     chinese_support_config.set_option("next_version_message", "A new version of <b>Chinese Support Add-on</b> is available.<br>&nbsp;<br>Do you want Anki to <b>download and install it automatically</b> now?<br>&nbsp;Alternately, you can also download it later through <tt>Tools->Add-ons->Browse and install</tt>.<br>&nbsp;<br><b>Version "+latest_version+":</b><br>"+latest_comment)
@@ -176,7 +176,7 @@ def edit_logic():
     edit_window = aqt.forms.editaddon.Ui_Dialog()
     edit_window.setupUi(d)
     d.setWindowTitle(_("Configure behavior of note edit dialog box"))
-    edit_window.text.setPlainText(unicode(open(edit_behavior_file).read(), "utf8"))
+    edit_window.text.setPlainText(str(open(edit_behavior_file).read(), "utf8"))
     d.connect(edit_window.buttonBox, SIGNAL("accepted()"), edit_logic_ok)
     d.exec_()
 
@@ -246,7 +246,7 @@ def myRebuildAddonsMenu(self):
     add_action(_("Development forum"), sm, lambda : goto_page("https://anki.tenderapp.com/discussions/add-ons/2336-chinese-support-add-on-development"))
     add_action(_("Video tutorial"), sm, lambda : goto_page("http://youtu.be/SiGUrrxptpg"))
     add_action(_("Report a bug"), sm, lambda : goto_page("https://github.com/ttempe/chinese-support-addon/issues"))
-    add_action(_("About..."), m, lambda : showInfo(u"Chinese support plugin v. " + __init__.__version__ + u"<br>Copyright © 2012-2014 Thomas TEMP&Eacute; and many others.<br><br>Please see source code for additional info."))
+    add_action(_("About..."), m, lambda : showInfo("Chinese support plugin v. " + __init__.__version__ + "<br>Copyright © 2012-2014 Thomas TEMP&Eacute; and many others.<br><br>Please see source code for additional info."))
     add_action(_("Please rate me on Ankiweb!"), m, lambda : goto_page("https://ankiweb.net/shared/info/3448800906"))
     update_dict_action_checkboxes()
 

@@ -18,7 +18,7 @@ class TestTranslator(unittest.TestCase):
 
     def test_translate(self):
         client = Translator(client_id, client_secret, debug=True)
-        self.assertEqual(client.translate("hello", "pt"), u'Ol\xe1')
+        self.assertEqual(client.translate("hello", "pt"), 'Ol\xe1')
 
     def test_invalid_client_id(self):
         client = Translator("foo", "bar")
