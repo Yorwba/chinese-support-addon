@@ -46,7 +46,7 @@ def ask_to_upgrade():
 
 def update_config():
     chinese_support_config.set_option("add-on version", __version__)
-    chinese_support_config.set_option("edit_behavior_model.py hash", md5.new(open(edit_behavior_model).read()).hexdigest())
+    chinese_support_config.set_option("edit_behavior_model.py hash", md5(open(edit_behavior_model, "rb").read()).hexdigest())
 
 if (not os.path.exists(edit_behavior_file)) or 0 == len(open(edit_behavior_file).read()):
     #New install or erased config file
@@ -54,14 +54,14 @@ if (not os.path.exists(edit_behavior_file)) or 0 == len(open(edit_behavior_file)
     update_config()
 elif not "edit_behavior_model.py hash" in chinese_support_config.options:
     #We are upgrading from 0.6.0 or earlier
-    current_hash = md5.new(open(edit_behavior_file).read()).digest()
+    current_hash = md5(open(edit_behavior_file, "rb").read()).digest()
     if current_hash not in older_versions:
         #User-modified
         ask_to_upgrade()
     update_config()
 elif __version__ != chinese_support_config.options["add-on version"]:
     #New version. Compare current edit_behavior with former model
-    current_hash = md5.new(open(edit_behavior_file).read()).hexdigest()
+    current_hash = md5(open(edit_behavior_file, "rb").read()).hexdigest()
     if current_hash != chinese_support_config.options["edit_behavior_model.py hash"]:
         ask_to_upgrade()
     update_config()
