@@ -22,12 +22,6 @@
 
 
 
-import string
-
-
-
-
-
 # early replacements
 
 
@@ -192,7 +186,7 @@ def bopomofo(pinyin):
     for pair in replacements:
 
 
-        pinyin = string.replace(pinyin, pair[0], pair[1])
+        pinyin = pinyin.replace(pair[0], pair[1])
 
 
 
