@@ -21,8 +21,8 @@ import re
 from aqt import mw
 from anki.hooks import addHook, wrap
 from aqt.editor import Editor, _html
-from aqt.utils  import getBase
-import anki.js
+#from aqt.utils  import getBase
+#import anki.js
 
 from . import edit_ui
 from . import edit_behavior
@@ -63,11 +63,11 @@ def colorize_notes(self, note, hide=True, focus=False):
         for l in note.model()["css"].split("\n"):
             if l.startswith(".tone"):
                 css_colors += l+"\n"
-        myHtml = _html % (
-            getBase(self.mw.col), anki.js.jquery,
-            _("Show Duplicates"))
-        myHtml = myHtml.replace("<style>", "<style\n>"+css_colors)
-        self.web.setHtml(myHtml, loadCB=self._loadFinished)
+        # myHtml = _html % (
+        #     getBase(self.mw.col), anki.js.jquery,
+        #     _("Show Duplicates"))
+        # myHtml = myHtml.replace("<style>", "<style\n>"+css_colors)
+        # self.web.setHtml(myHtml, loadCB=self._loadFinished)
 
 
 addHook('editFocusLost', on_focus_lost)
