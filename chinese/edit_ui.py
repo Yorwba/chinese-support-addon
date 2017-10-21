@@ -8,22 +8,21 @@ from .config import chinese_support_config as config
 
 toggleButton = None
 config_file_key = None
-editor_instance = None
 enable = None #enable editor UI enhancements for the current note type?
 
-def setupToggleButton(editor):
+def setupToggleButton(buttons, editor):
     global toggleButton
-    global editor_instance
-    editor_instance = editor
-    toggleButton = editor_instance._addButton("mybutton", toggleButtonClick, size=False, text="汉子", tip="Enable/disable <b>Chinese Support Add-on</b> input fill-up") #check=True
+    toggleButton = "toggle_chinese_support"
+    buttons.append(editor.addButton(None, toggleButton, toggleButtonClick, id=toggleButton, label="汉字", tip="Enable/disable <b>Chinese Support Add-on</b> input fill-up", toggleable=True))
+    return buttons
 
-def toggleButtonClick():
+def toggleButtonClick(editor):
     global enable
     enable = not enable
     config.set_option(config_file_key, enable)
-    updateToggleButton(editor_instance)
+    updateToggleButton(editor)
 
-def updateToggleButton(editor):
+def updateToggleButton(editor, *args, **kwargs):
     global config_file_key
     global enable
     try:
@@ -46,10 +45,10 @@ def updateToggleButton(editor):
 
     if enable:
 #        toggleButton.setChecked(True)
-        toggleButton.setText("✓ 汉子")
+        editor.web.eval('$("#%s .blabel").text("✓ 汉字")' % toggleButton)
     else:
 #        toggleButton.setChecked(False)
-        toggleButton.setText("✕ 汉子")
+        editor.web.eval('$("#%s .blabel").text("✕ 汉字")' % toggleButton)
    
 
     
