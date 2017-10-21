@@ -23,9 +23,8 @@ import aqt.main
 import urllib2
 import re
 
-from config import chinese_support_config
-import __init__
-import Chinese_support
+from .config import chinese_support_config
+from . import __init__
 import edit_behavior
 from upgrade import edit_behavior_file, do_upgrade
 import edit_ui

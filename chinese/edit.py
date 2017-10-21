@@ -24,8 +24,7 @@ from aqt.editor import Editor, _html
 from aqt.utils  import getBase
 import anki.js
 
-import Chinese_support
-import edit_ui
+from . import edit_ui
 import edit_behavior
 
 # Focus lost hook
