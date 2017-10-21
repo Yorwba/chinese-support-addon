@@ -69,7 +69,7 @@ def history(data, chunks=None, chunk_size=1):
     #Compute history
     if not chunks:
         try:
-            chunks=max(data.values())/chunk_size+1 #nb of periods to look back
+            chunks=max(data.values())//chunk_size+1 #nb of periods to look back
         except:
             chunks = 1 #This happens if the deck contains no Chinese
     histogram = [0]*(chunks+1)
@@ -80,7 +80,7 @@ def history(data, chunks=None, chunk_size=1):
     #Fill histogram, as a list. d = nb of days in the past (0=today).
     for d in list(data.values()):
         if d <= chunks*chunk_size:
-            histogram[d/chunk_size] += 1
+            histogram[d//chunk_size] += 1
         else:
             subtotal+=1
     #Fill history, as a list of coordinates: [(relative_day, nb_values),...]
