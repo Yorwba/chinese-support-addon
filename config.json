@@ -1,0 +1,8 @@
+{ 
+    "startup_tip_number" : 0,
+    "show_startup_tips" : true,
+    "dictionary" : "None",
+    "transcription" : "Pinyin",
+    "speech" : "Google TTS Mandarin"
+}
+

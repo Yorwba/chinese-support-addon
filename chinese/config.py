@@ -7,16 +7,8 @@
 
 import os.path
 import json
-from . import __init__
+from .__init__ import __version__
 from aqt import mw
-
-initial_options =  { 
-'startup_tip_number':0, 
-'show_startup_tips':True,
-'dictionary':'None',
-'transcription':'Pinyin',
-'speech':'Google TTS Mandarin',
-}
 
 startup_tips = [
 ('Thank you for downloading the <b>Chinese Support Add-on</b>.<br>Please remember to select a dictionary in the <tt>Tools-&gt;Chinese support</tt> menu, so that you may have automatic translation.', None),
@@ -44,16 +36,18 @@ class config:
         self.filepath = os.path.join(mw.pm.addonFolder(), "chinese", "chinese_addon_config.json")
         self.load()
         #Options that may be missing in some installs initialized by old versions of this code
-        self.add_option("latest_available_version", __init__.__version__)
+        self.add_option("latest_available_version", __version__)
         self.add_option("next_version_message", None)
         self.add_option("warned_about_MS_translate_long_delays", False)
     def load(self):
-        if not os.path.exists(self.filepath):
-            self.create_new()
-        self.options = json.load(open(self.filepath, 'r')) 
+        # if not os.path.exists(self.filepath):
+        #     self.create_new()
+        # self.options = json.load(open(self.filepath, 'r'))
+        self.options = mw.addonManager.getConfig(__name__)
 
     def save(self):
-        json.dump(self.options, open(self.filepath, 'w'))
+        # json.dump(self.options, open(self.filepath, 'w'))
+        mw.addonManager.writeConfig(__name__, self.options)
 
     def create_new(self):
         self.options = initial_options
