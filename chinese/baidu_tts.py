@@ -39,8 +39,11 @@ def get_word_from_baidu(source, lang="zh"):
     response = urllib.request.urlopen(request, timeout=5)
     if 200 != response.code:
         raise ValueError(str(response.code) + ': ' + response.msg)
+    content = response.read()
+    if content.startswith(b'<!DOCTYPE html>'):
+        raise ValueError('Got HTML instead of MP3 from Baidu.')
     with open(fullpath, 'wb') as audio_file:
-        audio_file.write(response.read())
+        audio_file.write(content)
     return filename
 
 
