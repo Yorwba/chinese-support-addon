@@ -20,6 +20,8 @@ from functools import reduce
 #
 # You may call any of these functions from the edit_behavior.py file.
 
+HANZI_PATTERN = '㐀-䶵一-鿯𠀀-𪛖𪜀-𫜴𫝀-𫠝𫠠-𬺡𬺰-𮯯'
+
 def colorize(text, ruby_whole=False):
     '''Add tone color info.
     (can be seen in the card preview, but not the note edit view).
@@ -50,11 +52,11 @@ def colorize(text, ruby_whole=False):
             def colorize_ruby_sub(p):
                 return '<span class="tone{t}">{r}</span>'.format(t=get_tone_number(p.group(2)), r=p.group())
 
-            text = re.sub('([\u3400-\u9fff]\[\s*)([a-zü'+accents+']+1?[0-9¹²³⁴]?)(.*?\])', colorize_ruby_sub, text, flags=re.I)    
+            text = re.sub('(['+HANZI_PATTERN+']\[\s*)([a-zü'+accents+']+1?[0-9¹²³⁴]?)(.*?\])', colorize_ruby_sub, text, flags=re.I)    
         else:
             text = re.sub('([a-zü'+accents+']+1?[0-9¹²³⁴]?)', colorize_pinyin_sub, text, flags=re.I)
     elif has_hanzi(text):
-        text = re.sub('([\u3400-\u9fff])', colorize_hanzi_sub, text)
+        text = re.sub('(['+HANZI_PATTERN+'])', colorize_hanzi_sub, text)
     else:
         text = re.sub('([&<"/]?[a-zü\u3100-\u312F'+accents+']+1?[0-9¹²³⁴ˊˇˋ˙]?)', colorize_pinyin_sub, text, flags=re.I)
     text = text+sound_tags
@@ -117,8 +119,8 @@ def silhouette(hanzi):
             r += i + " "
         return r[:-1]
 
-    hanzi = re.sub("[\u3400-\u9fff]+", insert_spaces, hanzi)
-    txt = re.sub("[\u3400-\u9fff]", "_", hanzi)
+    hanzi = re.sub("["+HANZI_PATTERN+"]+", insert_spaces, hanzi)
+    txt = re.sub("["+HANZI_PATTERN+"]", "_", hanzi)
     return txt
 
 
@@ -190,7 +192,7 @@ def ruby(text, transcription=None, only_one=False, try_dict_first=True):
     text = no_color(text)
     text = no_sound(text)
     #Make sure sound tag isn't confused with Hanzi
-    text = re.sub('([\u3400-\u9fff])(\[sound:)', r'\1 \2', text)
+    text = re.sub('(['+HANZI_PATTERN+'])(\[sound:)', r'\1 \2', text)
 
     def insert_multiple_pinyin_sub(p):
         hanzi=p.group(1)
@@ -214,9 +216,9 @@ def ruby(text, transcription=None, only_one=False, try_dict_first=True):
 
     text += '%'
     if try_dict_first and transcription in ["Pinyin", "Bopomofo"]:
-        text = re.sub('([\u3400-\u9fff]+)([^[])', insert_multiple_pinyin_sub, text)
-    text = re.sub('([\u3400-\u9fff])([^[])', insert_pinyin_sub, text)
-    text = re.sub('([\u3400-\u9fff])([^[])', insert_pinyin_sub, text)
+        text = re.sub('(['+HANZI_PATTERN+']+)([^[])', insert_multiple_pinyin_sub, text)
+    text = re.sub('(['+HANZI_PATTERN+'])([^[])', insert_pinyin_sub, text)
+    text = re.sub('(['+HANZI_PATTERN+'])([^[])', insert_pinyin_sub, text)
     text = text[:-1]
     text += sound(text)
     return text
@@ -230,7 +232,7 @@ def no_tone(text):
     def no_tone_marks_sub(p):
         return ""+p.group(1)+re.sub(r'1?[0-9¹²³⁴]', '', p.group(2))+"]"
     if has_ruby(text):
-        text = re.sub('([\u3400-\u9fff]\[)([^[]+?)\]', no_tone_marks_sub, text)
+        text = re.sub('(['+HANZI_PATTERN+']\[)([^[]+?)\]', no_tone_marks_sub, text)
     else:
         text = re.sub('([a-zü]+)1?[0-9¹²³⁴]', r'\1', text)
     return text
@@ -239,9 +241,9 @@ def hanzi(text):
     '''Returns just the anzi from a Ruby notation. 
     Eg: '你[nǐ][You]' becomes '你'.
     '''
-    text = re.sub('([\u3400-\u9fff])(\[[^[]+?\])', r'\1', text)
+    text = re.sub('(['+HANZI_PATTERN+'])(\[[^[]+?\])', r'\1', text)
     text = re.sub(r'\[sound:.[^[]+?\]', '', text)
-    text = re.sub(r'([^\u3400-\u9fff])\[[^[]+?\]\s*$', r'\1', text)
+    text = re.sub(r'([^'+HANZI_PATTERN+'])\[[^[]+?\]\s*$', r'\1', text)
     return text
 
 def transcribe(text, transcription=None, only_one=True):
@@ -267,10 +269,10 @@ def transcribe(text, transcription=None, only_one=True):
         r = db.get_cantonese(text, only_one)
     elif "Bopomofo" == transcription:
         r = db.get_pinyin(text, taiwan=True)
-        r = bopomofo_module.bopomofo(no_accents(r))
+        r = r and bopomofo_module.bopomofo(no_accents(r))
     else:
         r = ""
-    return r
+    return r or ""
 
 def pinyin_to_bopomofo(pinyin):
     '''
@@ -654,10 +656,10 @@ def get_tone_number(pinyin):
 
 
 def has_ruby(text):
-    return re.search("[\u3400-\u9fff]\[.+\]", text)
+    return re.search("["+HANZI_PATTERN+"]\[.+\]", text)
 
 def has_hanzi(text):
-    return re.search("[\u3400-\u9fff]", text)
+    return re.search("["+HANZI_PATTERN+"]", text)
 
 
 def get_character_transcription(hanzi, transcription=None):
@@ -716,5 +718,5 @@ def local_dict_colorize(txt, ruby=True):
             c += "[" + colorize(pinyin) + "]"
         return c
 
-    txt = re.sub("([\u3400-\u9fff|]+)\\[(.*?)\\]", _sub, txt)
+    txt = re.sub("(["+HANZI_PATTERN+"|]+)\\[(.*?)\\]", _sub, txt)
     return txt

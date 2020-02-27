@@ -43,6 +43,8 @@ from anki.hooks import wrap
 
 import time, re, sys
 
+from .edit_functions import HANZI_PATTERN
+
 now = time.mktime(time.localtime())
 
 def addchars(chars, txt, date):
@@ -50,7 +52,7 @@ def addchars(chars, txt, date):
     try:
         for c in txt:
             try:
-                if re.match( "[\u3400-\u9fff]", c):
+                if re.match( "["+HANZI_PATTERN+"]", c):
                     chars[c] = max(date, chars[c])
             except:
                 chars[c]=date
@@ -60,7 +62,7 @@ def addchars(chars, txt, date):
 def addword(words, txt, date):
     "List each card containing at least one chinese character" 
     try:
-        if re.match(".*[\u3400-\u9fff]", txt):
+        if re.match(".*["+HANZI_PATTERN+"]", txt):
             words[txt] = date
     except:
         pass
