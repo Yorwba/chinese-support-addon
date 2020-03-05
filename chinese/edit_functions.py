@@ -556,13 +556,13 @@ def simplify(text):
     '''Converts to simplified variants
     '''
     r = db.get_simplified(text)
-    return r
+    return r or ''
 
 def traditional(text):
     '''Converts to traditional variants
     '''
     r = db.get_traditional(text)
-    return r
+    return r or ''
 
 
 # Extra support functions and parameters
