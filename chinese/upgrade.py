@@ -11,7 +11,7 @@ except:
     import  md5
 from aqt import mw
 from aqt.utils import askUser, isWin, showInfo
-from aqt.downloader import download
+# from aqt.downloader import download
 
 from .config import chinese_support_config
 from .__init__ import __version__
@@ -72,7 +72,7 @@ else:
 def do_upgrade():
     #Broken
     mw.progress.start(immediate=True)
-    ret = download(mw, ankiweb_code)
+    ret = False # download(mw, ankiweb_code)
     if not ret:
         mw.progress.finish()
         showInfo(_("Download failed. Please try again later."))
