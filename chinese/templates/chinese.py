@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright: Damien Elmes <anki@ichi2.net>, Thomas TEMPE <thomas.tempe@alysse.org>
 # Copyright 2012, Thomas TEMPE <thomas.tempe@alysse.org>
+# # Copyright: Ankitects Pty Ltd and contributors
 # License: GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 # Based off Kieran Clancy's initial implementation.
 
@@ -12,7 +13,6 @@
 import re
 from anki.hooks import addHook
 from anki.utils import stripHTML
-from anki.template.hint import hint
 from .ruby import ruby_top, ruby_top_text, ruby_bottom, ruby_bottom_text
 from .ruby import no_sound
 from functools import reduce
@@ -79,6 +79,23 @@ def hanzi_context(txt, extra, context, tag, fullname):
             context_string = re.sub(h, " _ ", context_string)
     context_string = re.sub("  ", " ", context_string)
     return context_string
+
+def hint(txt: str, args, context, tag: str, fullname) -> str:
+    # From https://github.com/ankitects/anki/blob/31ceb5d7300c74a1d2315a2a4a79d33e6cce6013/pylib/anki/template_legacy.py#L147
+    if not txt.strip():
+        return ""
+    # random id
+    domid = "hint%d" % id(txt)
+    return """
+<a class=hint href="#"
+onclick="this.style.display='none';document.getElementById('%s').style.display='block';return false;">
+%s</a><div id="%s" class=hint style="display: none">%s</div>
+""" % (
+        domid,
+        _("Show %s") % tag,
+        domid,
+        txt,
+    )
 
 def hint_transcription(txt, extra, context, tag, fullname):
     return hint(ruby_top(txt), extra, context, 'Transcription', fullname)
