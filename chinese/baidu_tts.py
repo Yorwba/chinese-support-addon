@@ -24,7 +24,8 @@ url_gtts = 'http://fanyi.baidu.com/gettts?'
 user_agent_string = 'Mozilla/5.0'
 
 # was: http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&text=%E4%BD%A0%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88
-# now: http://fanyi.baidu.com/gettts?lan=zh&text=%E4%BD%A0%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88
+# then: http://fanyi.baidu.com/gettts?lan=zh&text=%E4%BD%A0%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88
+# now: http://fanyi.baidu.com/gettts?lan=zh&text=%E4%BD%A0%E5%9C%A8%E5%B9%B2%E4%BB%80%E4%B9%88&spd=3&source=web
 
 
 
@@ -40,6 +41,8 @@ def get_word_from_baidu(source, lang="zh"):
     if 200 != response.code:
         raise ValueError(str(response.code) + ': ' + response.msg)
     content = response.read()
+    if not content:
+        raise ValueError('Did not get anything from Baidu.')
     if content.startswith(b'<!DOCTYPE html>'):
         raise ValueError('Got HTML instead of MP3 from Baidu.')
     with open(fullpath, 'wb') as audio_file:
@@ -48,7 +51,7 @@ def get_word_from_baidu(source, lang="zh"):
 
 
 def build_query_url(source, lang):
-    qdict = dict(lan=lang, text=source.encode('utf-8'))
+    qdict = dict(lan=lang, text=source.encode('utf-8'), spd='3', source='web')
     return url_gtts + urllib.parse.urlencode(qdict)
 
 
